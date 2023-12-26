@@ -3,8 +3,6 @@ import { useState, useEffect } from "react";
 import Editor from "./Editor.js";
 import List from "./List.js";
 
-// localStorage.removeItem("memos");
-
 function App() {
   const [memos, setMemos] = useState([]);
   const [activeId, setActiveId] = useState(null);
@@ -15,7 +13,7 @@ function App() {
     if (localData) {
       setMemos(JSON.parse(localData));
     } else {
-      localStorage.setItem("memos", []);
+      localStorage.setItem("memos", JSON.stringify([]));
       setMemos([]);
     }
   }, []);
