@@ -1,7 +1,7 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import Editor from "./Editor.js";
-import List from "./List.js";
+import Editor from "./Editor";
+import List from "./List";
 
 function App() {
   const [memos, setMemos] = useState([]);
@@ -30,9 +30,8 @@ function App() {
     if (memos.length === 0) {
       nextId = 0;
     } else {
-      const maxId = memos
-        .map((memo) => memo.id)
-        .reduce((a, b) => Math.max(a, b), -Infinity);
+      const ids = memos.map((memo) => memo.id);
+      const maxId = Math.max(...ids);
       nextId = maxId + 1;
     }
     setActiveId(nextId);
@@ -47,7 +46,7 @@ function App() {
           <List
             memos={memos}
             onClick={(memo) =>
-              activeId === memo.id ? setActiveId(null) : setActiveId(memo.id)
+              setActiveId(activeId === memo.id ? null : memo.id)
             }
           />
           <button onClick={handleClick} id="change-add-mode-button">
@@ -60,7 +59,11 @@ function App() {
             id={activeId}
             key={activeId}
             isAddMode={isAddMode}
-            onEdit={(memos) => save(memos)}
+            onEdit={(memo) => {
+              const filteredMemos = memos.filter((m) => m.id !== memo.id);
+              save([...filteredMemos, memo]);
+            }}
+            onDelete={(id) => save(memos.filter((m) => m.id !== id))}
           />
         )}
       </div>

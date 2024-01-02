@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Editor({ memos, id, isAddMode, onEdit }) {
+export default function Editor({ memos, id, isAddMode, onEdit, onDelete }) {
   let memo;
   if (isAddMode) {
     memo = { id: id, title: `新規メモ${id + 1}`, content: "" };
@@ -9,14 +9,13 @@ export default function Editor({ memos, id, isAddMode, onEdit }) {
   }
 
   const [text, setText] = useState(memo.title + "\n" + memo.content);
-  const filteredMemos = memos.filter((m) => m.id !== memo.id);
 
   function handleSubmit(event) {
     event.preventDefault();
     const title = text.split(/\n/)[0];
     const content = text.split(/\n/).slice(1).join("\n");
-    const editedMemo = { id: memo.id, title: title, content: content };
-    onEdit([...filteredMemos, editedMemo]);
+    const editedMemo = { ...memo, title, content };
+    onEdit(editedMemo);
   }
 
   return (
@@ -34,7 +33,7 @@ export default function Editor({ memos, id, isAddMode, onEdit }) {
           <button
             type="button"
             id="delete-button"
-            onClick={() => onEdit(filteredMemos)}
+            onClick={() => onDelete(memo.id)}
           >
             削除
           </button>
