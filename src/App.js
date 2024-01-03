@@ -19,7 +19,7 @@ function App() {
   }, []);
 
   function save(memos) {
-    setMemos(memos);
+    setMemos(memos.sort((a, b) => a.id - b.id));
     localStorage.setItem("memos", JSON.stringify(memos));
     setIsAddMode(false);
     setActiveId(null);

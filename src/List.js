@@ -2,7 +2,6 @@ export default function List({ memos, onClick }) {
   return (
     <ul>
       {memos
-        .sort((a, b) => a.id - b.id)
         .map((memo) => (
           <li key={memo.id}>
             <button
