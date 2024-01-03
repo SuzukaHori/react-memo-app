@@ -5,7 +5,9 @@ export default function Editor({ originalMemo, id, onEdit, onDelete }) {
     originalMemo = { id: id, title: `新規メモ${id + 1}`, content: "" };
   }
 
-  const [text, setText] = useState(originalMemo.title + "\n" + originalMemo.content);
+  const [text, setText] = useState(
+    originalMemo.title + "\n" + originalMemo.content
+  );
 
   function handleSubmit(event) {
     event.preventDefault();
