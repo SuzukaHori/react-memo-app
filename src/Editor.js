@@ -1,20 +1,17 @@
 import { useState } from "react";
 
-export default function Editor({ memos, id, isAddMode, onEdit, onDelete }) {
-  let memo;
-  if (isAddMode) {
-    memo = { id: id, title: `新規メモ${id + 1}`, content: "" };
-  } else {
-    memo = memos.find((memo) => memo.id === id);
+export default function Editor({ originalMemo, id, onEdit, onDelete }) {
+  if (originalMemo === null) {
+    originalMemo = { id: id, title: `新規メモ${id + 1}`, content: "" };
   }
 
-  const [text, setText] = useState(memo.title + "\n" + memo.content);
+  const [text, setText] = useState(originalMemo.title + "\n" + originalMemo.content);
 
   function handleSubmit(event) {
     event.preventDefault();
     const title = text.split(/\n/)[0];
     const content = text.split(/\n/).slice(1).join("\n");
-    const editedMemo = { ...memo, title, content };
+    const editedMemo = { ...originalMemo, title, content };
     onEdit(editedMemo);
   }
 
@@ -33,7 +30,7 @@ export default function Editor({ memos, id, isAddMode, onEdit, onDelete }) {
           <button
             type="button"
             id="delete-button"
-            onClick={() => onDelete(memo.id)}
+            onClick={() => onDelete(originalMemo.id)}
           >
             削除
           </button>

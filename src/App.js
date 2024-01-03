@@ -55,7 +55,7 @@ function App() {
         </div>
         {activeId !== null && (
           <Editor
-            memos={memos}
+            originalMemo={isAddMode ? null : memos.find((memo) => memo.id === activeId)}
             id={activeId}
             key={activeId}
             isAddMode={isAddMode}
