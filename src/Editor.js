@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { LoginContext } from "./LoginContext";
 
 export default function Editor({ originalMemo, id, onEdit, onDelete }) {
+  const login = useContext(LoginContext);
+
   if (originalMemo === null) {
     originalMemo = { id: id, title: `新規メモ${id + 1}`, content: "" };
   }
@@ -25,18 +28,20 @@ export default function Editor({ originalMemo, id, onEdit, onDelete }) {
           value={text}
           onChange={(event) => setText(event.target.value)}
         ></textarea>
-        <div className="editor-button-wrapper">
-          <button type="submit" id="edit-button">
-            編集
-          </button>
-          <button
-            type="button"
-            id="delete-button"
-            onClick={() => onDelete(originalMemo.id)}
-          >
-            削除
-          </button>
-        </div>
+        {login && (
+          <div className="editor-button-wrapper">
+            <button type="submit" id="edit-button">
+              編集
+            </button>
+            <button
+              type="button"
+              id="delete-button"
+              onClick={() => onDelete(originalMemo.id)}
+            >
+              削除
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );
