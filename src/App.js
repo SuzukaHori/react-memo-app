@@ -11,9 +11,9 @@ function App() {
   const [login, setLogin] = useState(false);
 
   useEffect(() => {
-    const localData = localStorage.getItem("memos");
-    if (localData) {
-      setMemos(JSON.parse(localData));
+    const memosData = localStorage.getItem("memos");
+    if (memosData) {
+      setMemos(JSON.parse(memosData));
     } else {
       localStorage.setItem("memos", JSON.stringify([]));
       setMemos([]);
@@ -21,11 +21,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const localData = localStorage.getItem("login");
-    console.log(localStorage);
-    if (localData) {
-      const state = localStorage.getItem("login");
-      setLogin(JSON.parse(state));
+    const loginData = localStorage.getItem("login");
+    if (loginData) {
+      setLogin(JSON.parse(loginData));
     } else {
       localStorage.setItem("login", JSON.stringify(false));
     }
@@ -53,20 +51,28 @@ function App() {
 
   return (
     <div className="App">
-      {login ? "ログイン済み" : "未ログイン"}
-      <header>{activeId === null ? "一覧" : "編集"}</header>
-      <button
-        onClick={() => {
-          setLogin(!login);
-          localStorage.setItem("login", JSON.stringify(!login));
-        }}
-      >
-        {login ? "ログアウト" : "ログイン"}
-      </button>
+      <header>
+        {login ? "ログイン済み" : "未ログイン"}
+        <button
+          onClick={() => {
+            const state = !login;
+            setLogin(state);
+            localStorage.setItem("login", JSON.stringify(state));
+          }}
+          id="login-button"
+        >
+          {login ? "ログアウト" : "ログイン"}
+        </button>
+      </header>
       <div className="container">
         <LoginContext.Provider value={login}>
           <div className="memos-wrapper">
-            <List memos={memos} onClick={(memo) => setActiveId(activeId === memo.id ? null : memo.id)} />
+            <List
+              memos={memos}
+              onClick={(memo) =>
+                setActiveId(activeId === memo.id ? null : memo.id)
+              }
+            />
             {login && (
               <button onClick={handleClick} id="change-add-mode-button">
                 +
@@ -75,7 +81,9 @@ function App() {
           </div>
           {activeId !== null && (
             <Editor
-              originalMemo={isAddMode ? null : memos.find((memo) => memo.id === activeId)}
+              originalMemo={
+                isAddMode ? null : memos.find((memo) => memo.id === activeId)
+              }
               id={activeId}
               key={activeId}
               isAddMode={isAddMode}
