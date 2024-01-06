@@ -1,8 +1,8 @@
-import { useState, useContext } from "react";
-import { LoginUserContext } from "./LoginUserContext";
+import { useState } from "react";
+import { useLoginUser } from "./useLoginUser";
 
 export default function Editor({ originalMemo, id, onEdit, onDelete }) {
-  const currentUser = useContext(LoginUserContext);
+  const currentUser = useLoginUser();
 
   if (originalMemo === null) {
     originalMemo = { id: id, title: `新規メモ${id + 1}`, content: "" };

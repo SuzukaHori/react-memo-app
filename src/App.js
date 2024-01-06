@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Editor from "./Editor";
 import List from "./List";
 import Header from "./Header";
-import { LoginUserContext } from "./LoginUserContext";
+import { LoginUserProvider } from "./useLoginUser";
 
 // localStorage.removeItem("user");
 
@@ -58,11 +58,16 @@ function App() {
 
   return (
     <div className="App">
-      <LoginUserContext.Provider value={currentUser}>
+      <LoginUserProvider value={currentUser}>
         <Header onLogin={handleLogin} />
         <div className="container">
           <div className="memos-wrapper">
-            <List memos={memos} onClick={(memo) => setActiveId(activeId === memo.id ? null : memo.id)} />
+            <List
+              memos={memos}
+              onClick={(memo) =>
+                setActiveId(activeId === memo.id ? null : memo.id)
+              }
+            />
             {currentUser && (
               <button onClick={handleClick} id="change-add-mode-button">
                 +
@@ -71,7 +76,9 @@ function App() {
           </div>
           {activeId !== null && (
             <Editor
-              originalMemo={isAddMode ? null : memos.find((memo) => memo.id === activeId)}
+              originalMemo={
+                isAddMode ? null : memos.find((memo) => memo.id === activeId)
+              }
               id={activeId}
               key={activeId}
               isAddMode={isAddMode}
@@ -83,7 +90,7 @@ function App() {
             />
           )}
         </div>
-      </LoginUserContext.Provider>
+      </LoginUserProvider>
     </div>
   );
 }

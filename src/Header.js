@@ -1,8 +1,7 @@
-import { useContext } from "react";
-import { LoginUserContext } from "./LoginUserContext";
+import { useLoginUser } from "./useLoginUser";
 
 export default function Header({ onLogin }) {
-  const currentUser = useContext(LoginUserContext);
+  const currentUser = useLoginUser();
   return (
     <header>
       {currentUser ? "ログイン済み" : "未ログイン"}
