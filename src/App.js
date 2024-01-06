@@ -2,13 +2,16 @@ import "./App.css";
 import { useState, useEffect } from "react";
 import Editor from "./Editor";
 import List from "./List";
-import { LoginContext } from "./LoginContext";
+import Header from "./Header";
+import { LoginUserContext } from "./LoginUserContext";
+
+// localStorage.removeItem("user");
 
 function App() {
   const [memos, setMemos] = useState([]);
   const [activeId, setActiveId] = useState(null);
   const [isAddMode, setIsAddMode] = useState(false);
-  const [login, setLogin] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     const memosData = localStorage.getItem("memos");
@@ -21,11 +24,9 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const loginData = localStorage.getItem("login");
-    if (loginData) {
-      setLogin(JSON.parse(loginData));
-    } else {
-      localStorage.setItem("login", JSON.stringify(false));
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setCurrentUser(JSON.parse(userData));
     }
   }, []);
 
@@ -49,31 +50,20 @@ function App() {
     setIsAddMode(true);
   }
 
+  function handleLogin() {
+    const nextUser = currentUser ? null : "user1";
+    setCurrentUser(nextUser);
+    localStorage.setItem("user", JSON.stringify(nextUser));
+  }
+
   return (
     <div className="App">
-      <header>
-        {login ? "ログイン済み" : "未ログイン"}
-        <button
-          onClick={() => {
-            const state = !login;
-            setLogin(state);
-            localStorage.setItem("login", JSON.stringify(state));
-          }}
-          id="login-button"
-        >
-          {login ? "ログアウト" : "ログイン"}
-        </button>
-      </header>
-      <div className="container">
-        <LoginContext.Provider value={login}>
+      <LoginUserContext.Provider value={currentUser}>
+        <Header onLogin={handleLogin} />
+        <div className="container">
           <div className="memos-wrapper">
-            <List
-              memos={memos}
-              onClick={(memo) =>
-                setActiveId(activeId === memo.id ? null : memo.id)
-              }
-            />
-            {login && (
+            <List memos={memos} onClick={(memo) => setActiveId(activeId === memo.id ? null : memo.id)} />
+            {currentUser && (
               <button onClick={handleClick} id="change-add-mode-button">
                 +
               </button>
@@ -81,9 +71,7 @@ function App() {
           </div>
           {activeId !== null && (
             <Editor
-              originalMemo={
-                isAddMode ? null : memos.find((memo) => memo.id === activeId)
-              }
+              originalMemo={isAddMode ? null : memos.find((memo) => memo.id === activeId)}
               id={activeId}
               key={activeId}
               isAddMode={isAddMode}
@@ -94,8 +82,8 @@ function App() {
               onDelete={(id) => save(memos.filter((m) => m.id !== id))}
             />
           )}
-        </LoginContext.Provider>
-      </div>
+        </div>
+      </LoginUserContext.Provider>
     </div>
   );
 }

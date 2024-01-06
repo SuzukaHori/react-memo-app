@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
-import { LoginContext } from "./LoginContext";
+import { LoginUserContext } from "./LoginUserContext";
 
 export default function Editor({ originalMemo, id, onEdit, onDelete }) {
-  const login = useContext(LoginContext);
+  const currentUser = useContext(LoginUserContext);
 
   if (originalMemo === null) {
     originalMemo = { id: id, title: `新規メモ${id + 1}`, content: "" };
@@ -28,7 +28,7 @@ export default function Editor({ originalMemo, id, onEdit, onDelete }) {
           value={text}
           onChange={(event) => setText(event.target.value)}
         ></textarea>
-        {login && (
+        {currentUser && (
           <div className="editor-button-wrapper">
             <button type="submit" id="edit-button">
               編集
