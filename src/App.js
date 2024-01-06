@@ -59,7 +59,6 @@ function App() {
               isAddMode ? null : memos.find((memo) => memo.id === activeId)
             }
             id={activeId}
-            key={activeId}
             isAddMode={isAddMode}
             onEdit={(memo) => {
               const filteredMemos = memos.filter((m) => m.id !== memo.id);

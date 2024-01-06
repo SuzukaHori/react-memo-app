@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Editor({ originalMemo, id, onEdit, onDelete }) {
   if (originalMemo === null) {
@@ -8,6 +8,10 @@ export default function Editor({ originalMemo, id, onEdit, onDelete }) {
   const [text, setText] = useState(
     originalMemo.title + "\n" + originalMemo.content
   );
+
+  useEffect(() => {
+    setText(originalMemo.title + "\n" + originalMemo.content);
+  }, [originalMemo]);
 
   function handleSubmit(event) {
     event.preventDefault();
