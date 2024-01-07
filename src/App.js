@@ -5,8 +5,6 @@ import List from "./List";
 import Header from "./Header";
 import { LoginUserProvider } from "./useLoginUser";
 
-// localStorage.removeItem("user");
-
 function App() {
   const [memos, setMemos] = useState([]);
   const [activeId, setActiveId] = useState(null);
