@@ -48,7 +48,7 @@ function App() {
     setIsAddMode(true);
   }
 
-  function handleLogin() {
+  function handleAuthenticate() {
     const nextUser = currentUser ? null : "user1";
     setCurrentUser(nextUser);
     localStorage.setItem("user", JSON.stringify(nextUser));
@@ -57,7 +57,7 @@ function App() {
   return (
     <div className="App">
       <LoginUserProvider value={currentUser}>
-        <Header onLogin={handleLogin} />
+        <Header onAuthenticate={handleAuthenticate} />
         <div className="container">
           <div className="memos-wrapper">
             <List
