@@ -1,6 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useLoginUser } from "./useLoginUser";
 
 export default function Editor({ originalMemo, id, onEdit, onDelete }) {
+  const currentUser = useLoginUser();
+
   if (originalMemo === null) {
     originalMemo = { id: id, title: `新規メモ${id + 1}`, content: "" };
   }
@@ -8,10 +11,6 @@ export default function Editor({ originalMemo, id, onEdit, onDelete }) {
   const [text, setText] = useState(
     originalMemo.title + "\n" + originalMemo.content
   );
-
-  useEffect(() => {
-    setText(originalMemo.title + "\n" + originalMemo.content);
-  }, [originalMemo]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -29,18 +28,20 @@ export default function Editor({ originalMemo, id, onEdit, onDelete }) {
           value={text}
           onChange={(event) => setText(event.target.value)}
         ></textarea>
-        <div className="editor-button-wrapper">
-          <button type="submit" id="edit-button">
-            編集
-          </button>
-          <button
-            type="button"
-            id="delete-button"
-            onClick={() => onDelete(originalMemo.id)}
-          >
-            削除
-          </button>
-        </div>
+        {currentUser && (
+          <div className="editor-button-wrapper">
+            <button type="submit" id="edit-button">
+              編集
+            </button>
+            <button
+              type="button"
+              id="delete-button"
+              onClick={() => onDelete(originalMemo.id)}
+            >
+              削除
+            </button>
+          </div>
+        )}
       </form>
     </div>
   );
